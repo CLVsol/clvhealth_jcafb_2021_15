@@ -17,7 +17,7 @@ def secondsToStr(t):
     return str(timedelta(seconds=t))
 
 
-def get_sqlite(server_url, db_name, username, password, initialize=False):
+def get_sqlite(server_url, db_name, username, password, sqlite3_db_name, initialize=False):
 
     start = time()
 
@@ -48,7 +48,7 @@ def get_sqlite(server_url, db_name, username, password, initialize=False):
             if row['street_number2'] is False:
                 clv_partner_entity_contact_information_pattern['street_number2'].values[i] = None
 
-        conn = sqlite3.connect('data/jcafb_2025.db')
+        conn = sqlite3.connect(sqlite3_db_name)
 
         if initialize:
 

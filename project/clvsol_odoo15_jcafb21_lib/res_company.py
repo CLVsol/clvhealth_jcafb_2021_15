@@ -17,7 +17,7 @@ def secondsToStr(t):
     return str(timedelta(seconds=t))
 
 
-def get_sqlite(server_url, db_name, username, password, initialize=False):
+def get_sqlite(server_url, db_name, username, password, sqlite3_db_name, initialize=False):
 
     start = time()
 
@@ -40,7 +40,7 @@ def get_sqlite(server_url, db_name, username, password, initialize=False):
         )
         res_company = pd.DataFrame(res_company_objects)
 
-        conn = sqlite3.connect('data/jcafb_2025.db')
+        conn = sqlite3.connect(sqlite3_db_name)
 
         if initialize:
 

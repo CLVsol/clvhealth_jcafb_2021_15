@@ -17,7 +17,7 @@ def secondsToStr(t):
     return str(timedelta(seconds=t))
 
 
-def get_sqlite(server_url, db_name, username, password, search_domain, clear_table=True, initialize=False):
+def get_sqlite(server_url, db_name, username, password, sqlite3_db_name, search_domain, clear_table=True, initialize=False):
 
     start = time()
 
@@ -105,7 +105,7 @@ def get_sqlite(server_url, db_name, username, password, search_domain, clear_tab
             if row['value_numerical_box'] == 0.0:
                 survey_user_input_line['value_numerical_box'].values[i] = None
 
-        conn = sqlite3.connect('data/jcafb_2025.db')
+        conn = sqlite3.connect(sqlite3_db_name)
 
         if initialize:
 

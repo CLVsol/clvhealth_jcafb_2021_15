@@ -17,13 +17,13 @@ def secondsToStr(t):
     return str(timedelta(seconds=t))
 
 
-def get_sqlite(server_url, db_name, username, password, initialize=False):
+def get_sqlite(server_url, db_name, username, password, sqlite3_db_name, initialize=False):
 
     start = time()
 
     _logger.info(u'%s %s %s %s', '-->', 'get_sqlite', server_url, db_name)
 
-    clv_patient_tag_fields = ['id', 'name', 'description', 'color', 'active']
+    res_country_fields = ['id', 'name', 'code']
 
     common = client.ServerProxy('%s/xmlrpc/2/common' % server_url)
     user_id = common.authenticate(db_name, username, password, {})
@@ -32,39 +32,30 @@ def get_sqlite(server_url, db_name, username, password, initialize=False):
     if user_id:
 
         search_domain = []
-        clv_patient_tag_objects = models.execute_kw(
+        res_country_objects = models.execute_kw(
             db_name, user_id, password,
-            'clv.patient.tag', 'search_read',
-            [search_domain, clv_patient_tag_fields],
+            'res.country', 'search_read',
+            [search_domain, res_country_fields],
             {}
         )
-        clv_patient_tag = pd.DataFrame(clv_patient_tag_objects)
+        res_country = pd.DataFrame(res_country_objects)
 
-        conn = sqlite3.connect('data/jcafb_2025.db')
+        conn = sqlite3.connect(sqlite3_db_name)
 
         if initialize:
 
-            clv_patient_tag.to_sql('clv_patient_tag', conn, if_exists='replace', index=False)
+            res_country.to_sql('res_country', conn, if_exists='replace', index=False)
 
         else:
 
             cur = conn.cursor()
-            cur.execute('DELETE FROM clv_patient_tag')
+            cur.execute('DELETE FROM res_country')
             conn.commit()
 
-            clv_patient_tag.to_sql('clv_patient_tag', conn, if_exists='append', index=False)
-
-        sql = '''
-            UPDATE clv_patient_tag
-            SET description = NULL
-            WHERE description = '0';
-            '''
-        cur = conn.cursor()
-        cur.execute(sql)
-        conn.commit()
+            res_country.to_sql('res_country', conn, if_exists='append', index=False)
 
         conn.close()
 
     _logger.info(u'%s %s %s %s', '-->', 'Execution time:', secondsToStr(time() - start), '\n')
 
-    return clv_patient_tag
+    return res_country

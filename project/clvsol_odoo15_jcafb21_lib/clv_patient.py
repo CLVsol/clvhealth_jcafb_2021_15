@@ -17,7 +17,7 @@ def secondsToStr(t):
     return str(timedelta(seconds=t))
 
 
-def get_sqlite(server_url, db_name, username, password,
+def get_sqlite(server_url, db_name, username, password, sqlite3_db_name,
                clv_patient_category,
                clv_patient_marker,
                clv_patient_tag,
@@ -140,7 +140,7 @@ def get_sqlite(server_url, db_name, username, password,
             else:
                 clv_patient['tag_ids'].values[i] = None
 
-        conn = sqlite3.connect('data/jcafb_2025.db')
+        conn = sqlite3.connect(sqlite3_db_name)
 
         if initialize:
 
