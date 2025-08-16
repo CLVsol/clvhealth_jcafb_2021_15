@@ -25,7 +25,7 @@ def get_sqlite(server_url, db_name, username, password, sqlite3_db_name, initial
 
     res_partner_fields = ['id', 'name', 'type',
                           'street_name', 'street', 'street_number', 'street_number2', 'street2', 'district',
-                          'zip', 'city_id', 'state_id', 'country_id',
+                          'zip', 'city', 'state_id', 'country_id',
                           'active'
                           ]
 
@@ -44,7 +44,7 @@ def get_sqlite(server_url, db_name, username, password, sqlite3_db_name, initial
         )
         res_partner = pd.DataFrame(res_partner_objects)
 
-        res_partner.insert(res_partner.columns.get_loc("city_id") + 1, 'city', None)
+        # res_partner.insert(res_partner.columns.get_loc("city_id") + 1, 'city', None)
         res_partner.insert(res_partner.columns.get_loc("state_id") + 1, 'country_state', None)
         res_partner.insert(res_partner.columns.get_loc("country_id") + 1, 'country', None)
 
@@ -68,11 +68,13 @@ def get_sqlite(server_url, db_name, username, password, sqlite3_db_name, initial
             if row['zip'] is False:
                 res_partner['zip'].values[i] = None
 
-            if row['city_id']:
-                res_partner['city_id'].values[i] = row['city_id'][0]
-                res_partner['city'].values[i] = row['city_id'][1]
-            else:
-                res_partner['city_id'].values[i] = None
+            # if row['city_id']:
+            #     res_partner['city_id'].values[i] = row['city_id'][0]
+            #     res_partner['city'].values[i] = row['city_id'][1]
+            # else:
+            #     res_partner['city_id'].values[i] = None
+            if row['city'] is False:
+                res_partner['city'].values[i] = None
 
             if row['state_id']:
                 res_partner['state_id'].values[i] = row['state_id'][0]
